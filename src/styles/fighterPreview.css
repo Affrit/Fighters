@@ -11,3 +11,8 @@
 .fighter-preview___left {
   align-items: flex-start;
 }
+
+.fighter-prop {
+  color: #dad2d2;
+  font-size: 25px;
+}
