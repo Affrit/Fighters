@@ -60,14 +60,18 @@ export async function fight(firstFighter, secondFighter) {
         }
       })
 
-      if (firstFighter.health <= 0 ){
-        firstFighterHealthBar.style.width = '100%'
+      if (firstFighter.health <= fullFirstFighterHealth * 0.35){
         firstFighterHealthBar.style.backgroundColor = 'red'
+      }
+      if (secondFighter.health <= fullSecondFighterHealth * 0.35){
+        secondFighterHealthBar.style.backgroundColor = 'red'
+      }
+      if (firstFighter.health <= 0 ){
+        firstFighterHealthBar.style.width = '0px'
         resolve(secondFighter)
       }
       if (secondFighter.health <= 0 ){
-        secondFighterHealthBar.style.width = '100%'
-        secondFighterHealthBar.style.backgroundColor = 'red'
+        secondFighterHealthBar.style.width = '0px'
         resolve(firstFighter)
       }
     });
