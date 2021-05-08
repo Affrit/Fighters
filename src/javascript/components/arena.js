@@ -10,7 +10,7 @@ export function renderArena(selectedFighters) {
   root.innerHTML = '';
   root.append(arena);
 
-  console.log(selectedFighters);
+  
   fight(...selectedFighters).then((winner) => showWinnerModal(winner))
   // todo:
   // - start the fight

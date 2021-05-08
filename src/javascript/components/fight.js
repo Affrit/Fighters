@@ -3,35 +3,45 @@ import { controls } from '../../constants/controls';
 export async function fight(firstFighter, secondFighter) {
   return new Promise((resolve) => {
 
-    let firstFighterHealthBar = document.getElementById('left-fighter-indicator')
-    let secondFighterHealthBar = document.getElementById('right-fighter-indicator')
+    const firstFighterHealthBar = document.getElementById('left-fighter-indicator')
+    const secondFighterHealthBar = document.getElementById('right-fighter-indicator')
 
     const fullFirstFighterHealth = firstFighter.health
     const fullSecondFighterHealth = secondFighter.health
 
+    const [keyQ, keyW, keyE] = controls.PlayerOneCriticalHitCombination
+    const [keyU, keyI, keyO] = controls.PlayerTwoCriticalHitCombination
+
+    const pressed = new Set()
+
     let firstisBloked = false
     let secondisBloked = false
 
-    console.log(`firstHealth = ${firstFighter.health}`)
-    console.log(`secondHealth = ${secondFighter.health}`)
-
     document.addEventListener('keydown', function(event){
       const action = event.code
-      console.log(action);
+
+      pressed.add(action)
+
+      if (pressed.has(keyQ) && pressed.has(keyW) && pressed.has(keyE)){
+        secondFighter.health -= getCritHit(firstFighter)
+        secondFighterHealthBar.style.width = `${(100 * secondFighter.health) / fullSecondFighterHealth}%`
+      }
+      if (pressed.has(keyU) && pressed.has(keyI) && pressed.has(keyO)){
+        firstFighter.health -= getCritHit(secondFighter)
+        firstFighterHealthBar.style.width = `${(100 * firstFighter.health) / fullFirstFighterHealth}%`
+      }
 
       switch(action){
         case controls.PlayerOneAttack:
           if (!firstisBloked && !secondisBloked){
             secondFighter.health -= getDamage(firstFighter, secondFighter)
             secondFighterHealthBar.style.width = `${(100 * secondFighter.health) / fullSecondFighterHealth}%`
-            console.log(`secondHealth = ${secondFighter.health}`)
             break
           }
         case controls.PlayerTwoAttack:
           if (!firstisBloked && !secondisBloked){
             firstFighter.health -= getDamage(secondFighter, firstFighter)
             firstFighterHealthBar.style.width = `${(100 * firstFighter.health) / fullFirstFighterHealth}%`
-            console.log(`firstHealth = ${firstFighter.health}`)
             break
           }
         case controls.PlayerOneBlock:
@@ -41,6 +51,7 @@ export async function fight(firstFighter, secondFighter) {
           secondisBloked = true
           break
       }
+
       document.addEventListener('keyup', function(event){
         const action = event.code
         if (action === controls.PlayerOneBlock || action === controls.PlayerTwoBlock){
@@ -48,6 +59,7 @@ export async function fight(firstFighter, secondFighter) {
           secondisBloked = false
         }
       })
+
       if (firstFighter.health <= 0 ){
         firstFighterHealthBar.style.width = '100%'
         firstFighterHealthBar.style.backgroundColor = 'red'
@@ -58,6 +70,10 @@ export async function fight(firstFighter, secondFighter) {
         secondFighterHealthBar.style.backgroundColor = 'red'
         resolve(firstFighter)
       }
+    });
+
+    document.addEventListener('keyup', function(event) {
+      pressed.delete(event.code);
     });
   // resolve the promise with the winner when fight is over
 });
