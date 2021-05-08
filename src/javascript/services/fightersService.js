@@ -5,7 +5,6 @@ class FighterService {
     try {
       const endpoint = 'fighters.json';
       const apiResult = await callApi(endpoint, 'GET');
-      console.log(apiResult);
       return apiResult;
     } catch (error) {
       throw error;

@@ -1,4 +1,4 @@
-import { createElement } from '../helpers/domHelper';
+import { createElement } from '../helpers/domHelper'
 import { getFighterInfo } from '../components/fighterSelector'
 
 export function createFighterPreview(fighter, position) {
@@ -7,9 +7,8 @@ export function createFighterPreview(fighter, position) {
     tagName: 'div',
     className: `fighter-preview___root ${positionClassName}`,
   });
-
-  const { name, health, attack, defense } = fighter;
-  const fighterImage = createFighterImage(fighter);
+  const { name, health, attack, defense } = fighter
+  const fighterImage = createFighterImage(fighter)
   const fighterProps = createElement({
     tagName: 'div',
     className: `fighter-prop`,
@@ -19,15 +18,15 @@ export function createFighterPreview(fighter, position) {
   <h1>${name}</h1>
   <div>health: ${health}</div>
   <div>attack: ${attack}</div>
-  <div>defense: ${defense}</div>`;
-  fighterElement.append(fighterImage, fighterProps);
+  <div>defense: ${defense}</div>`
+  fighterElement.append(fighterImage, fighterProps)
   // todo: show fighter info (image, name, health, etc.)
 
   return fighterElement;
 }
 
 export function createFighterImage(fighter) {
-  const { source, name } = fighter;
+  const { source, name } = fighter
   const attributes = { 
     src: source, 
     title: name,
@@ -39,5 +38,5 @@ export function createFighterImage(fighter) {
     attributes,
   });
 
-  return imgElement;
+  return imgElement
 }
