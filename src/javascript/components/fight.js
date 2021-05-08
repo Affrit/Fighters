@@ -2,12 +2,71 @@ import { controls } from '../../constants/controls';
 
 export async function fight(firstFighter, secondFighter) {
   return new Promise((resolve) => {
-    // resolve the promise with the winner when fight is over
-  });
+
+    let firstFighterHealthBar = document.getElementById('left-fighter-indicator')
+    let secondFighterHealthBar = document.getElementById('right-fighter-indicator')
+
+    const fullFirstFighterHealth = firstFighter.health
+    const fullSecondFighterHealth = secondFighter.health
+
+    let firstisBloked = false
+    let secondisBloked = false
+
+    console.log(`firstHealth = ${firstFighter.health}`)
+    console.log(`secondHealth = ${secondFighter.health}`)
+
+    document.addEventListener('keydown', function(event){
+      const action = event.code
+      console.log(action);
+
+      switch(action){
+        case controls.PlayerOneAttack:
+          if (!firstisBloked && !secondisBloked){
+            secondFighter.health -= getDamage(firstFighter, secondFighter)
+            secondFighterHealthBar.style.width = `${(100 * secondFighter.health) / fullSecondFighterHealth}%`
+            console.log(`secondHealth = ${secondFighter.health}`)
+            break
+          }
+        case controls.PlayerTwoAttack:
+          if (!firstisBloked && !secondisBloked){
+            firstFighter.health -= getDamage(secondFighter, firstFighter)
+            firstFighterHealthBar.style.width = `${(100 * firstFighter.health) / fullFirstFighterHealth}%`
+            console.log(`firstHealth = ${firstFighter.health}`)
+            break
+          }
+        case controls.PlayerOneBlock:
+          firstisBloked = true
+          break
+        case controls.PlayerTwoBlock:
+          secondisBloked = true
+          break
+      }
+      document.addEventListener('keyup', function(event){
+        const action = event.code
+        if (action === controls.PlayerOneBlock || action === controls.PlayerTwoBlock){
+          firstisBloked = false
+          secondisBloked = false
+        }
+      })
+      if (firstFighter.health <= 0 ){
+        firstFighterHealthBar.style.width = '100%'
+        firstFighterHealthBar.style.backgroundColor = 'red'
+        resolve(secondFighter)
+      }
+      if (secondFighter.health <= 0 ){
+        secondFighterHealthBar.style.width = '100%'
+        secondFighterHealthBar.style.backgroundColor = 'red'
+        resolve(firstFighter)
+      }
+    });
+  // resolve the promise with the winner when fight is over
+});
 }
 
 export function getDamage(attacker, defender) { 
-  return getBlockPower(defender) >= getHitPower(attacker) ? 0 : getHitPower(attacker) - getBlockPower(defender)
+  const blockPower = getBlockPower(defender)
+  const hitPower = getHitPower(attacker)
+  return blockPower >= hitPower ? 0 : hitPower - blockPower
   // return damage
 }
 
