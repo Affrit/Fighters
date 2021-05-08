@@ -2,6 +2,7 @@ import { createElement } from '../helpers/domHelper';
 import { renderArena } from './arena';
 import versusImg from '../../../resources/versus.png';
 import { createFighterPreview } from './fighterPreview';
+import { fighterService } from '../services/fightersService';
 
 export function createFightersSelector() {
   let selectedFighters = [];
@@ -13,13 +14,26 @@ export function createFightersSelector() {
     const secondFighter = Boolean(playerOne) ? playerTwo ?? fighter : playerTwo;
     selectedFighters = [firstFighter, secondFighter];
 
-    renderSelectedFighters(selectedFighters);
+
+    try {
+      if (firstFighter.name === secondFighter.name){
+        alert('You cannot choose same fighters!')
+        window.location.reload()
+      }
+      renderSelectedFighters(selectedFighters);
+    } catch (error) {
+      console.log("Select second fighter!");
+  }
   };
 }
 
 const fighterDetailsMap = new Map();
 
 export async function getFighterInfo(fighterId) {
+  if (fighterDetailsMap.has(fighterId)) return fighterDetailsMap.get(fighterId)
+  const result = await fighterService.getFighterDetails(fighterId);
+  fighterDetailsMap.set(fighterId, result);
+  return result
   // get fighter info from fighterDetailsMap or from service and write it to fighterDetailsMap
 }
 
