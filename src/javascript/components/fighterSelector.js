@@ -13,8 +13,7 @@ export function createFightersSelector() {
     const firstFighter = playerOne ?? fighter;
     const secondFighter = Boolean(playerOne) ? playerTwo ?? fighter : playerTwo;
     selectedFighters = [firstFighter, secondFighter];
-
-
+    
     try {
       if (firstFighter.name === secondFighter.name){
         alert('You cannot choose same fighters!')
