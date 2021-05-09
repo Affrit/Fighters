@@ -91,14 +91,14 @@ export function getDamage(attacker, defender) {
 }
 
 export function getHitPower(fighter) {
-  let criticalHitChance = Math.floor(Math.random() * 2) + 1;
+  let criticalHitChance = Math.random() * 2 + 1;
   let hitPower = fighter.attack * criticalHitChance
   return hitPower
   // return hit power
 }
 
 export function getBlockPower(fighter) {
-  let dodgeChance = Math.floor(Math.random() * 2) + 1;
+  let dodgeChance = Math.random() * 2 + 1;
   let blockPower = fighter.defense * dodgeChance
   return blockPower
   // return block power
