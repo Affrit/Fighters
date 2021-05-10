@@ -17,18 +17,26 @@ export async function fight(firstFighter, secondFighter) {
     let firstisBloked = false
     let secondisBloked = false
 
+    let coolDown = true
+    function critHitCooldown(ms){
+      coolDown = false
+      setTimeout(() => coolDown = true, ms)
+    }
+
     document.addEventListener('keydown', function(event){
       const action = event.code
 
       pressed.add(action)
 
-      if (pressed.has(keyQ) && pressed.has(keyW) && pressed.has(keyE)){
+      if (pressed.has(keyQ) && pressed.has(keyW) && pressed.has(keyE) && coolDown){
         secondFighter.health -= getCritHit(firstFighter)
         secondFighterHealthBar.style.width = `${(100 * secondFighter.health) / fullSecondFighterHealth}%`
+        critHitCooldown(10000)
       }
-      if (pressed.has(keyU) && pressed.has(keyI) && pressed.has(keyO)){
+      if (pressed.has(keyU) && pressed.has(keyI) && pressed.has(keyO) && coolDown){
         firstFighter.health -= getCritHit(secondFighter)
         firstFighterHealthBar.style.width = `${(100 * firstFighter.health) / fullFirstFighterHealth}%`
+        critHitCooldown(10000)
       }
 
       switch(action){
